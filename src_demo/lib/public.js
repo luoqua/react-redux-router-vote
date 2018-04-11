@@ -196,8 +196,38 @@ class strUtil {
 		return str.replace(/[^\x00-\xff]/g,'xx').length;//将所有非\x00-\xff字符转化为xx两个字符，再计算字符串
 	}
 
+	/**
+	 * 格式化百分比
+	 * @param   str 
+	 * @return {str}  
+	 */
 	static formatPercent = (str) => {
-		let reg = /\%/g
+		let reg = /\%/g;
+		str = str.toString().replace(reg, '');
+		return str;
+	}
+
+	 /**
+	  * 格式化千分位
+	  * @param str
+	  * @returns {str}
+	  */
+	static formatKilo = (str) => {
+   str = str.toString();
+   if (/[^0-9\.]/.test(str)) return "invalid value";
+   str = str.replace(/^(\d*)$/, "$1.");
+   str = str.replace(/(\d*\.\d\d)\d*/, "$1");
+   str = str.replace(".", ",");
+   var re = /(\d)(\d{3},)/;
+   while (re.test(str))
+     str = str.replace(re, "$1,$2");
+   str = str.replace(/.(\d*)$/, ".$1");
+   str = str.substr(str.length - 1, 1) == '.' ? str.substring(0, str.length -
+     1) : str;
+   if (!(/\./.test(str))) {
+     str += '.00';
+   }
+   return str.replace(/^\./, "0.");
 	}
 
 
