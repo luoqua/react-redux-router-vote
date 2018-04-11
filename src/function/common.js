@@ -1,4 +1,6 @@
 /**
+
+/**
  * 设置页面 fontSize
  */
 export function setFontSize() {

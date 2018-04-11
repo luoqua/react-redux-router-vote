@@ -34,6 +34,28 @@ export const getVoteList = (pageIndex, pageLimit) => {
     })
  }
 }
+//提交报名信息
+export const submitSignInfo = () => {
+  return (dispatch,getState) => {
+    var opitions = {
+      method:"POST",
+      body: {
+        owner_pic: img_url, // 图片
+        owner_address: owner_address,
+        owner_tel: owner_tel,
+        owner_desc:owner_desc,
+      }
+    }
+    Fetch( 'http://bb.wxjysgcd.com/WuHu/Index/voteInfoUpload', opitions)
+      .then((data) => {
+      if( data != null ){
+        
+      }
+    })
+  }
+}
+
+
 
 //填充投票列表
 export const setVoteList = ( votelist ) => ({
@@ -74,7 +96,7 @@ export const SetUploadImg = ( imgurl ) => ({
 //获取上传的图片
 export const GetUploadImg = () => {
   return (dispatch, getState) => {
-    var state = getState;
+    var state = getState();
     console.log(state )
   }
 }

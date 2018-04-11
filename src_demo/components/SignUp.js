@@ -25,6 +25,7 @@ let now = timestamp = Date.parse(new Date()) / 1000;
 class SignUpIndex extends Component {
 	componentDidMount() {
 	    
+	    const { actions, todos } = this.props;
 	    var uploadImgList = []
 	    var that = this;
 	    var uploader = new plupload.Uploader({
@@ -66,11 +67,12 @@ class SignUpIndex extends Component {
 	            },
 
 	            FileUploaded: function(up, file, info) {
+	            	console.log(info)
 	                if (info.status == 200) {
 	                    that.mask_shadow = false;
 	                    that.upload_loading = false;
 	                    var imgUrl = "http://jys-weixin.oss-cn-shanghai.aliyuncs.com/" + get_uploaded_object_name(file.name)+"?x-oss-process=style/compress"
-	                    that.uploadImgList.push(imgUrl)
+	                    actions.SetUploadImg(imgUrl)
 	                }
 	            },
 
@@ -161,16 +163,19 @@ SignUpIndex.propTypes = {
 
 export default class SignUp extends Component {
      componentDidMount() {
-          console.log( this )
+          
           if( this.props.todos.listloading  != ""){
                this.props.todos.listloading.destroy()       //移除上一组件绑定的 touchmove 事件
           }
+
+          
      }
 	render() {
+		const { todos, actions }  = this.props;
 		return (
 			<div id="listloading2">
 				<Header />
-				<SignUpIndex />
+				<SignUpIndex todos={ todos } actions={ actions } />
 				<Footer />
 			</div>
 		)

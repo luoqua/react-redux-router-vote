@@ -6,7 +6,7 @@ export default class Footer extends Component {
 	static propType ={
 		footerItem:PropTypes.array.isRequired
 	}
-
+      
 	render() {
 		return (
 				<div className="bot-nav flex align-center f10 bg02">

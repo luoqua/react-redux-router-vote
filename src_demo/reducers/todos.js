@@ -24,7 +24,7 @@ const initialState = {
 	listloading:"",
 	touch_bottom_flag:false,
 	vote_list_id:"",
-	uploadImgUrl:[],
+	uploadImgUrl:"",
 }
 
 export default function todos(state = initialState, action) {
@@ -56,7 +56,7 @@ export default function todos(state = initialState, action) {
 				todo.id === action.voteId
 			)}
 		case SETUPLOADIMG:
-			return { ...state,uploadImgUrl:[ ...state.uploadImgUrl,...action.imgurl] }
+			return { ...state,uploadImgUrl:[ state.uploadImgUrl,action.imgurl] }
 
 			default:
 			return state
