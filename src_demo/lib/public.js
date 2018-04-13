@@ -468,6 +468,141 @@ class dateUtil {
  	}
 }
 
+/**
+ * navigator 帮助类
+ */
 class navigatorUtil {
-	
+
+	/**
+	 * 头部信息
+	 * @type {[type]}
+	 */
+	static userAgent = navigator.userAgent;
+
+	/**
+	 * 是否为ipad
+	 * @return {[type]} [description]
+	 */
+	static isIPad = () => {
+		return (navigatorUtil.userAgent.indexOf("ipad") > - 1);
+	}
+
+	/**
+  * 是否为iphone
+  * @param  {[type]}  userAgent [description]
+  * @return {Boolean}           [description]
+  */
+	static isIPhone = () => {
+		return (navigatorUtil.userAgent.indexOf("iphone") > -1);
+	}
+
+	/**
+	 * 是否为ios系统
+	 * @return {[type]} [description]
+	 */
+	static isIOS = () => {
+		return navigatorUtil.isIPad(navigatorUtil.userAgent) || navigatorUtil.isIPhone(navigator.userAgent);
+	}
+
+	/**
+	 * 是否为Android系统
+	 * @return {[type]} [description]
+	 */
+	static isAndroid = ()=> {
+		return (navigatorUtil.userAgent.indexOf("Android") > -1) || (navigatorUtil.userAgent.indexOf("Linux") > -1);
+	}
+
+	/**
+  * 判断是否为微信
+  */
+  static isWeixin = () => {
+   return (navigatorUtil.userAgent.indexOf("MicroMessenger") > -1);
+  }
+}
+
+class dateUtil {
+
+	/**
+	 * 获取数据方法
+	 * @param  {[type]}   info        [description]
+	 * @param  {[type]}   url         [访问接口地址]
+	 * @param  {String}   method      [get post]
+	 * @param  {[type]}   param       [传递过去的参数 字符串格式 如 clientType: 'M']
+	 * @param  {Function} successCall [成功的回调函数]
+	 * @param  {Function} errorCall   [错误的回调函数]
+	 * @return {[type]}               [description]
+	 */
+	static getData = (info, url, method = 'post', param, successCall = ()=>{}, errorCall=()=>{}) => {
+		let obj = { clientType: 'M'};
+		let param2 = Object.assign(obj,param);
+		var setting = {
+			url:config.baseUrl + Url ,//默认ajax 请求地址
+			type:method, //请求的方式
+			data:param2, //发给服务器的数据
+		};
+		//请求成功执行方法
+		setting.success = (res, xhr)=> {
+			dateUtil.successCall(res,xhr,info,successCall);
+		}
+		//请求失败执行方法
+		setting.error = (xhr) => {
+			dateUtil.errorCall(xhr,info,errorCall);
+		}
+		return dateUtil.ajax(setting);
+
+	}
+
+	static ajax = (mySetting)=>{
+		var setting = {
+			url:window.location.pathname,//默认ajax请求地址
+			async:true,//true。默认设置下，所有请求均为异步请求，如果需要发送同步请求，请求此项设置为 false
+			type:'GET',//请求的方式
+			data:{},//发给服务器的数据
+			dataType:'json',
+			success:function(text) { },//请求成功执行方法
+			error:function() {}, //错误回调
+		}
+		var aData = [];//存储数据
+		var sData = [];//拼接数据
+		Object.assign(setting,mySetting);//属性覆盖
+		for (var attr in setting.data) {
+			aData.push( attr + '=' + filter(setting.data[attr]));
+		}
+		sData = aData.join('&');
+		setting.type = setting.type.toUpperCase();
+
+		var xhr = new XMLHttpRequest();
+		try {
+				if( setting.type == 'GET') {	//get方式请求
+					sData = setting.url + '?' +sData;
+					xhr.open(setting.type,sData + '&' + new Date.getTime(), setting.async);
+					xhr.send();
+				} else {
+					xhr.open(setting.type, setting.url, setting.async);
+					xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					xhr.send(sData);
+				}
+
+		} catch (e) {
+			return httpEnd();
+		}
+
+		if(setting.async) {
+			xhr.addEventListener('readystatechange', httpEnd, false);
+		} else {
+			httpEnd();
+		}
+
+		function httpEnd() {
+			if( xhr.readystate == 4) {
+				var head = xhr.getAllReponseHeader();
+				var reponse = xhr.reponseText;
+				//将服务器返回的数据，转换成json
+				if(/application\/json/.test(head) || setting.dataType === 'json' || /^(\{|\[)([\s\S])*?(\]|\}).test(reponse))
+			}
+		}
+
+
+	}
+
 }
