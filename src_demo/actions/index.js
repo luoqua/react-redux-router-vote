@@ -97,7 +97,11 @@ export const SetUploadImg = ( imgurl ) => ({
 export const GetUploadImg = () => {
   return (dispatch, getState) => {
     var state = getState();
-    console.log(state )
+    return state.todos.uploadImgUrl;
   }
 }
-
+//移除已上传的图片
+export const RemoveUploadImg = ( index ) => ({
+  type:types.REMOVEUPLOADIMG,
+  index:index
+})

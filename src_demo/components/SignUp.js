@@ -67,11 +67,11 @@ class SignUpIndex extends Component {
 	            },
 
 	            FileUploaded: function(up, file, info) {
-	            	console.log(info)
+	            	console.log(file)
 	                if (info.status == 200) {
 	                    that.mask_shadow = false;
 	                    that.upload_loading = false;
-	                    var imgUrl = "http://jys-weixin.oss-cn-shanghai.aliyuncs.com/" + get_uploaded_object_name(file.name)+"?x-oss-process=style/compress"
+		                var imgUrl = "http://jys-weixin.oss-cn-shanghai.aliyuncs.com/" + get_uploaded_object_name(file.name)+"?x-oss-process=style/compress"
 	                    actions.SetUploadImg(imgUrl)
 	                }
 	            },
@@ -96,6 +96,8 @@ class SignUpIndex extends Component {
 
 
 	render() {
+		let { actions, todos } = this.props;
+		const uploadImgUrl = actions.GetUploadImg();
 		return (
 			<section id="login-form" className="csbm">
 			    <h3>参赛报名处</h3>
@@ -103,16 +105,23 @@ class SignUpIndex extends Component {
 			        <ul>
 			            <li>
 			                <div className="fl w_300"><span className="red">*</span>上传您的美居的清晰照片（1-3张）：</div>
-			                <input type="radio" name="myradio" value="random_name"   />
+			                <input type="radio" name="myradio" value="random_name"  defaultChecked="checked"/>
 			                <div className="post-upload">
 			                    <div className="post-upload-box">
-			                        <div id="post-upload-main" className="post-upload-main post-upload-text clearfix"><span id="preview" className="post-upload-upload-preview"></span>
+			                        <div id="post-upload-main" className="post-upload-main post-upload-text clearfix">
+			                        <span id="preview" className="post-upload-upload-preview"></span>
+			                        	{uploadImgUrl.map(( item, index)=>
+		                            		<div className="post-upload-upload-preview-item" key={{index}} style={{backgroundImage:'url('+item }}>
+                                              <a href="javascript:void(0);" onClick={() => actions.RemoveUploadImg(index) } >[X]</a>
+                                            </div>	
+		                            	)}
 			                            <div className="post-upload-button">
 			                                <div id="container" className="post-upload-btn-addpic" >
-			                                <i className="post-upload-plus"></i> 
-			                                <a id="selectfiles" className="btn" >
-			                                </a>
+				                                <i className="post-upload-plus"></i> 
+				                                <a id="selectfiles" className="btn" >
+				                                </a>
 			                                </div>
+		                            	
 			                            </div>
 			                        </div>
 			                        <div id="uploadInf" className="post-upload-inf" ></div>
@@ -235,7 +244,7 @@ function send_request() {
         var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';　　
         var maxPos = chars.length;　　
         var pwd = '';　　
-        for (i = 0; i < len; i++) {　　
+        for (let i = 0; i < len; i++) {　　
             pwd += chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
@@ -254,7 +263,7 @@ function send_request() {
         if (g_object_name_type == 'local_name') {
             g_object_name += "${filename}"
         } else if (g_object_name_type == 'random_name') {
-            suffix = get_suffix(filename)
+            let suffix = get_suffix(filename)
             g_object_name = key + random_string(10) + suffix
         }
         return ''

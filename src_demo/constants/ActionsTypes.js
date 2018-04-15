@@ -10,3 +10,4 @@ export const RESETSCROLLFLAG = 'RESETSCROLLFLAG'  //重置上拉下拉状态
 export const GET_VOTELIST_ID = 'GET_VOTELIST_ID'  // 获取指定id下的数据
 export const SETUPLOADIMG  = 'SETUPLOADIMG'       // 存储图片上传
 export const GETUPLOADIMG  =  'GETUPLOADIMG'	  // 获取存储图片
+export const REMOVEUPLOADIMG = 'REMOVEUPLOADIMG'  //移除存储图片

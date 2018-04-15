@@ -10,7 +10,8 @@ import {
 	RESETSCROLLFLAG,
 	GET_VOTELIST_ID,
 	SETUPLOADIMG,
-	GETUPLOADIMG
+	GETUPLOADIMG,
+	REMOVEUPLOADIMG
 } from '../constants/ActionsTypes'
 
 const initialState = {
@@ -24,7 +25,7 @@ const initialState = {
 	listloading:"",
 	touch_bottom_flag:false,
 	vote_list_id:"",
-	uploadImgUrl:"",
+	uploadImgUrl:[],
 }
 
 export default function todos(state = initialState, action) {
@@ -56,8 +57,10 @@ export default function todos(state = initialState, action) {
 				todo.id === action.voteId
 			)}
 		case SETUPLOADIMG:
-			return { ...state,uploadImgUrl:[ state.uploadImgUrl,action.imgurl] }
+			return { ...state,uploadImgUrl:state.uploadImgUrl.push(action.imgurl) ? state.uploadImgUrl : action.imgurl}
 
+		case REMOVEUPLOADIMG:
+			return { ...state,uploadImgUrl:state.uploadImgUrl.splice(action.index,1) ? state.uploadImgUrl : state.uploadImgUrl}
 			default:
 			return state
 	}
