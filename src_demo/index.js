@@ -45,6 +45,12 @@ const SignUp = (location, cb) => {
     }, 'SignUp');
 }
 
+const Alert = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./components/Alert').default);
+    }, 'Alert');
+}
+
 const Main = () => (
 	<Router history={hashHistory}>
 		<Route exact path="/" component={App} >
@@ -52,6 +58,7 @@ const Main = () => (
       <Route path="/info/:id"  getComponent={VoteInfo} />
       <Route path="/index_thd" getComponent={IndexThd} />
       <Route path="/sign_up" getComponent={SignUp} />
+      <Route path="/alert" getComponent={Alert} />
     </Route>
   </Router>
 )
