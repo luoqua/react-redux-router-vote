@@ -27,3 +27,46 @@
  }
 }
 
+.loading {
+    $centerRadius: 1em;
+    $itemWidth: .5em;
+    $itemHeight: .2em;
+    $width: $centerRadius + $itemWidth * 2;
+    $height: $width;
+    width: $width;
+    height: $height;
+    position: relative;
+    .loading-item {
+        width: $itemWidth;
+        height: $itemHeight;
+        margin-top: $itemHeight / 2 * -1;
+        margin-left: $centerRadius / 2;
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        background-color: #d1d1d5;
+        transform-origin: ($centerRadius / 2 * -1) ($itemHeight / 2);
+        border-radius: 1px;
+        @for $i from 1 through 12 {
+            &:nth-child(#{$i}) {
+                transform: rotate(($i - 1) * 30deg);
+                animation: loading-item 1s linear infinite #{-1 + $i / 12}s;
+            }
+        }
+        @at-root {
+            @keyframes loading-item{
+                0% {
+                    opacity: 1;
+                }
+                @for $i from 1 through 11 {
+                    #{$i / 12 * 100}% {
+                        opacity: 1 - $i / 12;
+                    }
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

@@ -23,6 +23,10 @@ import listloadingstyle from '../../public/css/listloading.min.css'
 
 import iconfont from '../../public/js/iconfont'
 
+import Loading from '../components/loading'
+
+import Alert from '../components/alert'
+
 setFontSize()
 
 
@@ -33,12 +37,13 @@ class App extends Component {
 		const { todos, actions } = this.props
 		return (
 			<div>
-				{React.cloneElement(this.props.children, 
+						{React.cloneElement(this.props.children, 
 		            {
 		                actions:actions,
 		                todos: todos,
 		            }) 
 		        }
+	      <Alert show = {todos.alertShow} />
 			</div>
 		)
 	}

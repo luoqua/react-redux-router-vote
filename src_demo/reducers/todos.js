@@ -11,7 +11,8 @@ import {
 	GET_VOTELIST_ID,
 	SETUPLOADIMG,
 	GETUPLOADIMG,
-	REMOVEUPLOADIMG
+	REMOVEUPLOADIMG,
+	CHANGEALERTSHOW
 } from '../constants/ActionsTypes'
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
 	touch_bottom_flag:false,
 	vote_list_id:"",
 	uploadImgUrl:[],
+	alertShow:false,
 }
 
 export default function todos(state = initialState, action) {
@@ -61,6 +63,10 @@ export default function todos(state = initialState, action) {
 
 		case REMOVEUPLOADIMG:
 			return { ...state,uploadImgUrl:state.uploadImgUrl.splice(action.index,1) ? state.uploadImgUrl : state.uploadImgUrl}
+
+		case CHANGEALERTSHOW:
+
+			return {...state,alertShow : action.status}
 			default:
 			return state
 	}

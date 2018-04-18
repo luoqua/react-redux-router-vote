@@ -105,3 +105,8 @@ export const RemoveUploadImg = ( index ) => ({
   type:types.REMOVEUPLOADIMG,
   index:index
 })
+
+export const ChangeAlertshow = ( status ) =>({
+  types:types.CHANGEALERTSHOW,
+  status:status,
+})
