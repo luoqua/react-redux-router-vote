@@ -43,7 +43,8 @@ class App extends Component {
 		                todos: todos,
 		            }) 
 		        }
-	      <Alert show = {todos.alertShow} />
+	      <Alert show = {todos.alertShow} message = {todos.alertMessage} />
+	      <Loading show = {todos.loadingShow} message = {todos.loadingMessage} />
 			</div>
 		)
 	}

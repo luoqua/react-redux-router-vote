@@ -36,6 +36,8 @@ export default class AppIndex extends Component {
 	render(){
 		
 		const { todos, actions } = this.props
+
+    	
 		return (
 			<div>
 				<Index actions = {actions} todos = {todos}/> 

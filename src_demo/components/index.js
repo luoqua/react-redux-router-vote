@@ -23,7 +23,6 @@ class IndexInfo extends Component {
   render() {
 
     const { pageInfo } = this.props;
-    
     return (
       <div className="top-data color03 flex pack-center f14 mt10">
             <div className="item1 t-center">已参与

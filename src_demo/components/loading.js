@@ -7,7 +7,8 @@ import scss from '../../public/scss/loading.scss'
 export default class loading extends Component {
 
 	render(){
-
+    const {show,message} = this.props;
+    if( !show ) return null;
 		return( 
           <div>
 						<div className="component-loading">
@@ -21,10 +22,10 @@ export default class loading extends Component {
                 <div className="loading-list"></div>
                 <div className="loading-list"></div>
               </div>
-              <div className="toast_text">数据加载中</div>
+              <div className="toast_text">{ message }</div>
             </div>
             <div className="toast_mask"></div>
           </div> 
-					)
+				)
 		}
 	}

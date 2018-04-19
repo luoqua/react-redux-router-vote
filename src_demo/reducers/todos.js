@@ -12,7 +12,10 @@ import {
 	SETUPLOADIMG,
 	GETUPLOADIMG,
 	REMOVEUPLOADIMG,
-	CHANGEALERTSHOW
+	CHANGEALERTSHOW,
+	CHANGELOADINGSHOW,
+	SETTIMER,
+	INITIALUPLOADIMG
 } from '../constants/ActionsTypes'
 
 const initialState = {
@@ -28,6 +31,11 @@ const initialState = {
 	vote_list_id:"",
 	uploadImgUrl:[],
 	alertShow:false,
+	alertMessage:"提交成功",
+	loadingShow:false,
+	loadingMessage:"数据加载中",
+	timerFlag:true,
+	rankList:[],
 }
 
 export default function todos(state = initialState, action) {
@@ -65,8 +73,16 @@ export default function todos(state = initialState, action) {
 			return { ...state,uploadImgUrl:state.uploadImgUrl.splice(action.index,1) ? state.uploadImgUrl : state.uploadImgUrl}
 
 		case CHANGEALERTSHOW:
+			return {...state,alertShow : (action.show == undefined || action.show == "") ? state.show : action.show,alertMessage: ( action.message  == undefined || action.message  == "") ? state.alertMessage : action.message}
 
-			return {...state,alertShow : action.status}
+		case CHANGELOADINGSHOW:
+			return {...state,loadingShow : (action.show == undefined || action.show == "") ? state.show : action.show,loadingMessage: ( action.message  == undefined || action.message  == "") ? state.alertMessage : action.message}
+
+		case SETTIMER:
+			return {...state,timerFlag:!state.timerFlag}
+
+		case INITIALUPLOADIMG:
+			return {...state,uploadImgUrl:[]}
 			default:
 			return state
 	}

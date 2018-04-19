@@ -35,8 +35,9 @@ export const getVoteList = (pageIndex, pageLimit) => {
  }
 }
 //提交报名信息
-export const submitSignInfo = () => {
+export const submitSignInfo = (img_url,owner_address,owner_tel,owner_desc) => {
   return (dispatch,getState) => {
+    dispatch(ChangeLoadingshow(true,"数据提交中"))
     var opitions = {
       method:"POST",
       body: {
@@ -49,9 +50,32 @@ export const submitSignInfo = () => {
     Fetch( 'http://bb.wxjysgcd.com/WuHu/Index/voteInfoUpload', opitions)
       .then((data) => {
       if( data != null ){
-        
+       dispatch(setRankList(data))
       }
     })
+  }
+}
+
+
+
+//获取排名数据
+export const getVoteRankList = () => {
+  return (dispatch,getState) =>{
+    var opitions = {
+      method:"POST",
+      body: {
+        pageLimit: 60,
+        pageIndex: 1,
+      }
+    }
+    Fetch('http://bb.wxjysgcd.com/WuHu/Index/getVoteRankList', opitions)
+      .then((data) => {
+      if( data != null ){
+        dispatch(ChangeLoadingshow(false))
+        dispatch(ChangeAlertshow(true,"提交成功"))
+      }
+    })
+
   }
 }
 
@@ -106,7 +130,46 @@ export const RemoveUploadImg = ( index ) => ({
   index:index
 })
 
-export const ChangeAlertshow = ( status ) =>({
-  types:types.CHANGEALERTSHOW,
-  status:status,
+//alert 弹窗
+export const ChangeAlertshow = ( show,message ) =>({
+  type:types.CHANGEALERTSHOW,
+  show:show,
+  message:message
+})
+//初始化图片数组
+export const initialUploadImg = () =>({
+  type:types.INITIALUPLOADIMG,
+})
+
+//alert 控制alert
+
+export const ControlAlertshow = (show,message) =>{
+  return (dispatch, getState) => {
+    var state = getState();
+    if( !state.todos.timerFlag ){
+      return false;
+    }
+    dispatch(ChangeAlertshow(show,message));
+    dispatch(setTimer())
+    setTimeout(function(){
+      dispatch(ChangeAlertshow(false))
+      dispatch(setTimer());
+    },2000)
+ }
+}
+
+//loading
+export const ChangeLoadingshow = ( show, message) => ({
+  type:types.CHANGELOADINGSHOW,
+  show:show,
+  message:message
+})
+//设置定时器状态
+export const setTimer = () => ({
+  type:types.SETTIMER
+})
+//设置定时器状态
+export const setRankList = ( ranklist ) => ({
+  type:types.SETTIMER,
+  ranklist:ranklist,
 })

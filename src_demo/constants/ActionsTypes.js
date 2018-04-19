@@ -12,3 +12,6 @@ export const SETUPLOADIMG  = 'SETUPLOADIMG'       // 存储图片上传
 export const GETUPLOADIMG  =  'GETUPLOADIMG'	  // 获取存储图片
 export const REMOVEUPLOADIMG = 'REMOVEUPLOADIMG'  //移除存储图片
 export const CHANGEALERTSHOW = 'CHANGEALERTSHOW'  //改变弹窗状态
+export const CHANGELOADINGSHOW = 'CHANGELOADINGSHOW' //改变loading状态
+export const SETTIMER = 'SETTIMER' //存储定时任务
+export const INITIALUPLOADIMG = 'INITIALUPLOADIMG' //初始化图片数组状态

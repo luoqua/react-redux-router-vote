@@ -23,6 +23,20 @@ let timestamp
 let now = timestamp = Date.parse(new Date()) / 1000;
 
 class SignUpIndex extends Component {
+	
+	 constructor(props) {
+	 	super(props)
+	 	let { actions, todos } = this.props;
+		let uploadImgUrl = actions.GetUploadImg();
+        this.state = {
+            owner_pic: "", // 图片
+	        owner_address:  "",
+	        owner_tel:  "",
+	        owner_desc: "",
+	        uploadImgUrl:uploadImgUrl,
+        };
+     }
+
 	componentDidMount() {
 	    
 	    const { actions, todos } = this.props;
@@ -62,15 +76,12 @@ class SignUpIndex extends Component {
 	            },
 
 	            UploadProgress: function(up, file) {
-	                that.mask_shadow = true;
-	                that.upload_loading = true;
+	                actions.ChangeLoadingshow(true,"图片上传中")
 	            },
 
 	            FileUploaded: function(up, file, info) {
-	            	console.log(file)
 	                if (info.status == 200) {
-	                    that.mask_shadow = false;
-	                    that.upload_loading = false;
+	                    actions.ChangeLoadingshow(false)
 		                var imgUrl = "http://jys-weixin.oss-cn-shanghai.aliyuncs.com/" + get_uploaded_object_name(file.name)+"?x-oss-process=style/compress"
 	                    actions.SetUploadImg(imgUrl)
 	                }
@@ -94,10 +105,60 @@ class SignUpIndex extends Component {
 	    uploader.init();
 	}
 
+	submitSignInfo(){
+		let owner_address,owner_tel,owner_pic,owner_desc;
 
+		owner_pic = this.props.todos.uploadImgUrl.join(",");
+		
+		if(owner_pic == ""){
+			this.props.actions.ControlAlertshow(true,"请先上传自己的美居图片");
+			return false;
+		}
+
+		if( this.state.owner_address == ""){
+			this.props.actions.ControlAlertshow(true,"请先输入装修地址");
+			return false;
+		}
+
+		if( this.state.owner_tel == ""){
+			this.props.actions.ControlAlertshow(true,"请先输入手机号");
+			return false;
+		}else{
+			 owner_tel = this.state.owner_tel;
+			 if(! /^[1][3,4,5,7,8][0-9]{9}$/.test(owner_tel)){
+			 	this.props.actions.ControlAlertshow(true,"请输入正确格式的手机号码");
+				return false;
+			 }
+		}
+
+		if( this.state.owner_desc == ""){
+			this.props.actions.ControlAlertshow(true,"请先输入作品描述");
+			return false;
+		}else{
+			owner_desc = this.state.owner_desc;
+		}
+
+		this.props.actions.submitSignInfo(owner_pic,owner_address,owner_tel,owner_desc)
+		this.refs.input_address.value="";
+		this.refs.input_tel.value="";
+		this.refs.input_desc.value="";
+		let uploadImgUrl=[];
+		this.setState({uploadImgUrl:uploadImgUrl})
+		this.props.actions.initialUploadImg()
+	}
+
+	onhandleInput(name,e) {
+		
+	    
+	    for( var i in this.state) {
+	    	if( i == name) {
+	    		this.state[i] = e.target.value;
+	    	}
+	    }
+	    
+	}
 	render() {
 		let { actions, todos } = this.props;
-		const uploadImgUrl = actions.GetUploadImg();
 		return (
 			<section id="login-form" className="csbm">
 			    <h3>参赛报名处</h3>
@@ -110,7 +171,7 @@ class SignUpIndex extends Component {
 			                    <div className="post-upload-box">
 			                        <div id="post-upload-main" className="post-upload-main post-upload-text clearfix">
 			                        <span id="preview" className="post-upload-upload-preview"></span>
-			                        	{uploadImgUrl.map(( item, index)=>
+			                        	{this.state.uploadImgUrl.map(( item, index)=>
 		                            		<div className="post-upload-upload-preview-item" key={{index}} style={{backgroundImage:'url('+item }}>
                                               <a href="javascript:void(0);" onClick={() => actions.RemoveUploadImg(index) } >[X]</a>
                                             </div>	
@@ -133,19 +194,19 @@ class SignUpIndex extends Component {
 			            <li>
 			                <div className="fl" style = {{width: "25%"}} ><span className="red">*</span>小区名称</div>
 			                <div className="tjnr">
-			                    <input type="text" placeholder="填写您的美居的小区名称" className="w_100 text01" />
+			                    <input type="text" placeholder="填写您的美居的小区名称" className="w_100 text01"  ref="input_address" onChange={ this.onhandleInput.bind(this,"owner_address") } />
 			                </div>
 			            </li>
 			            <li>
 			                <div className="fl" style = {{width: "25%"}}><span className="red">*</span>联系电话</div>
 			                <div className="tjnr">
-			                    <input type="tel" placeholder="填写联系人手机号码" className="w_100 text01" />
+			                    <input type="tel" placeholder="填写联系人手机号码" className="w_100 text01" ref="input_tel"   onChange={ this.onhandleInput.bind(this,"owner_tel") }  />
 			                </div>
 			            </li>
 			            <li>
 			                <div className="fl w_300"><span className="red">*</span>作品简介</div>
 			                <div className="xynr w_full">
-			                    <textarea type="text" data-validate="true" data-required="true" d="" id="bmdesc" name="bmdesc"  placeholder="填写参赛作品的简介与描述，为自己拉票" rows="4" className="xynrt"></textarea>
+			                    <textarea type="text" data-validate="true" data-required="true" d="" id="bmdesc" ref="input_desc" name="bmdesc"    placeholder="填写参赛作品的简介与描述，为自己拉票" rows="4" className="xynrt" onChange={ this.onhandleInput.bind(this,"owner_desc") } ></textarea>
 			                </div>
 			            </li>
 			            <li className="mid">
@@ -153,7 +214,7 @@ class SignUpIndex extends Component {
 			                <input type="hidden" name="tomhash" value="587952" />
 			                <input type="hidden" name="vid" value="2" />
 			                <input type="hidden" name="act" value="add2" />
-			                <input type="button" name="submit" value="提交报名" id="submit" className="tjbutton id_add_form_btn" />
+			                <input type="button" name="submit" value="提交报名" id="submit" className="tjbutton id_add_form_btn" onClick={()=> this.submitSignInfo()}/>
 			            </li>
 			            <li className="lastform">
 			                *为必填项

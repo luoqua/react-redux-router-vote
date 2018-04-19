@@ -45,6 +45,8 @@ const SignUp = (location, cb) => {
     }, 'SignUp');
 }
 
+
+
 /*const Alert = (location, cb) => {
     require.ensure([], require => {
         cb(null, require('./components/Alert').default);
