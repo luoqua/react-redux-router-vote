@@ -45,6 +45,11 @@ const SignUp = (location, cb) => {
     }, 'SignUp');
 }
 
+const RankList = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./components/RankList').default);
+    }, 'RankList');
+}
 
 
 /*const Alert = (location, cb) => {
@@ -66,6 +71,7 @@ const Main = () => (
       <Route path="/info/:id"  getComponent={VoteInfo} />
       <Route path="/index_thd" getComponent={IndexThd} />
       <Route path="/sign_up" getComponent={SignUp} />
+      <Route path="/rank_list" getComponent={RankList} />
     </Route>
   </Router>
 )

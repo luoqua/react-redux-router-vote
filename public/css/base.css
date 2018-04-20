@@ -47,3 +47,17 @@ body{
 .listloadingClass{
     overflow:hidden;
 }
+.oops {
+    margin-top: 100px;
+    text-align: center;
+    color: #b3b3b3;
+    height: 100%!important;
+}
+.oops img {
+    width: 80px;
+    display: block;
+    margin: 0 auto;
+}
+.oops p {
+    line-height: 50px;
+}

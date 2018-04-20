@@ -37,11 +37,34 @@ class IndexInfo extends Component {
 }
 
 class SearchInfo extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      owner_number: "", // 图片
+    };
+  }
+
+  handelInput(event){
+    if( event.target.value == ""){
+      this.props.actions.initialVoteList();   //初始化投票列表数据
+      this.props.actions.getVoteList(1,6)
+      this.setState({ owner_number:""})
+    }else{
+      this.setState({ owner_number:event.target.value})
+    }
+  }
+  searchList(){
+    if( this.state.owner_number == ""){
+      return false;
+    }
+    this.props.actions.searchVoteList(this.state.owner_number)
+  }
   render() {
     return (
       <div className="searchbox flex mt10 plr10 f12">
-        <input type="text" className="text item1 bgf color02 bdr5 bd02" name="q" value="" placeholder="搜索小区名称\编号" />
-        <input type="button" className="submit-btn ml5 bg04 colorf bdr5" value="搜索"  />
+        <input type="text" className="text item1 bgf color02 bdr5 bd02" name="q"  placeholder="搜索小区名称\编号"  onChange = { this.handelInput.bind(this) }/>
+        <input type="button" className="submit-btn ml5 bg04 colorf bdr5" value="搜索" onClick={ this.searchList.bind(this) } />
     	</div>
     )
   }
@@ -71,8 +94,7 @@ class VoteList extends Component {
 
         // 创建iscroll之前必须要先设置父元素的高度，否则无法拖动iscroll
         $('#loading, .listloadingClass').height(hei);
-        var Listloading = require('listloading');
-
+        var Listloading = require('../lib/listloading');
         var flg;
         var pageIndex = 1; //初始分页页数
         var pageLimit = 6; //分页每页显示条数
@@ -97,6 +119,7 @@ class VoteList extends Component {
           }
         });
         that.props.actions.setListloading(listloading)
+
       }else{
         that.props.listloading.refresh();
       }
@@ -111,16 +134,16 @@ class VoteList extends Component {
     
   }
   render() {
-    const { VoteList, actions } = this.props;
-    return (
-
-      <div id="waterbox" className="plr5 color02 mt10">
-        { VoteList.map( item =>
-          <VoteListSection key={ item.id } VoteList = { item } actions = {actions}/>
-        )}
-          <div className="clearfix"></div>
-      </div>
-    )
+    const { VoteList, actions,listloading,nothingFlag } = this.props;
+    
+      return (
+        <div id="waterbox" className="plr5 color02 mt10">
+          { VoteList.map( item =>
+            <VoteListSection key={ item.id } VoteList = { item } actions = {actions}/>
+          )}
+            <div className="clearfix"></div>
+        </div>
+      )
   }
 }
 
@@ -136,15 +159,31 @@ export default class Index extends Component {
   }
   render() {
     const { todos, actions } = this.props;
-    return (
-      <div id="loading">
-        <div>
-          <Header />
-  				<IndexInfo pageInfo = { todos.pageInfo}/>
-  				<SearchInfo actions = { actions.searchList}/>
-  				<VoteList VoteList = { todos.vote_list } actions = { actions } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
+    if( todos.nothingFlag ){
+      return(
+        <div id="loading">
+          <div>
+            <Header />
+            <IndexInfo pageInfo = { todos.pageInfo}/>
+            <SearchInfo actions = { actions} todos={todos}/>
+            <div className="oops">
+              <img src={ require('../../public/image/oops.png') } /> 
+              <p>空空如也~啥都还没有呢</p>
+            </div>
+          </div>
         </div>
-			</div>
-    )
+      )
+    }else{
+      return (
+        <div id="loading2">
+          <div>
+            <Header />
+    				<IndexInfo pageInfo = { todos.pageInfo}/>
+    				<SearchInfo actions = { actions} todos={todos}/>
+    				<VoteList VoteList = { todos.vote_list } actions = { actions } nothingFlag={ todos.nothingFlag } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
+          </div>
+  			</div>
+      )
+    }
   }
 }

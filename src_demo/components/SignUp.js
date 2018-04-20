@@ -166,7 +166,7 @@ class SignUpIndex extends Component {
 			        <ul>
 			            <li>
 			                <div className="fl w_300"><span className="red">*</span>上传您的美居的清晰照片（1-3张）：</div>
-			                <input type="radio" name="myradio" value="random_name"  defaultChecked="checked"/>
+			                <input type="radio" name="myradio" value="random_name"  defaultChecked="checked"  style={{opacity:0}}/>
 			                <div className="post-upload">
 			                    <div className="post-upload-box">
 			                        <div id="post-upload-main" className="post-upload-main post-upload-text clearfix">

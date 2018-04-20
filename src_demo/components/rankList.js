@@ -1,30 +1,61 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
 import PropTypes from 'prop-types'
+import Header from './Header'
+import Footer from './Footer'
 
-
-export default class RankList extends Component {
+class RankListIndex extends Component {
+    constructor(props){
+        super(props)
+    }
+    componentDidMount(){
+        const {todos,actions} = this.props;
+        actions.getVoteRankList()
+    }
 
 	render(){
-    const {show,message} = this.props;
-    if( !show ) return null;
+    const {todos,actions} = this.props;
+        console.log(this)
 		return( 
-          <div class="rank  f14 plr10 mt10 special—color">
-                <table class="w100">
-                    <tr>
-                        <td>排名</td>
-                        <td>小区名称</td>
-                        <td>票数</td>
-                    </tr>
-                    <template v-for="(item,index) in rankList">
+           <div className="rank  f14 plr10 mt10 special—color" style={{paddingBottom:"0.35rem"}}>
+                <table className="w100">
+                    <tbody>
                         <tr>
-                            <td style="font-size:12px;">{{index*1+1}}</td>
-                            <td style="font-size:12px;">{{item.owner_address}}</td>
-                            <td style="font-size:12px;">{{item.owner_vote}}</td>
+                            <td>排名</td>
+                            <td>小区名称</td>
+                            <td>票数</td>
                         </tr>
-                    </template>
+                        { todos.rankList.map(( item, index )=>
+                            <tr key={index}>
+                                <td style={{fontSize:"12px"}}>{index*1+1}</td>
+                                <td style={{fontSize:"12px"}}>{item.owner_address}</td>
+                                <td style={{fontSize:"12px"}}>{item.owner_vote}</td>
+                            </tr>
+                        )} 
+                    </tbody>
                 </table>
             </div> 
 				)
 		}
-	}
+}
+
+export default class RankList extends Component {
+     componentDidMount() {
+          
+          if( this.props.todos.listloading  != ""){
+               this.props.todos.listloading.destroy()       //移除上一组件绑定的 touchmove 事件
+          }
+
+          
+     }
+    render() {
+        const { todos, actions }  = this.props;
+        return (
+            <div id="listloading2">
+                <Header />
+                <RankListIndex todos={ todos } actions={ actions } />
+                <Footer />
+            </div>
+        )
+    }
+}

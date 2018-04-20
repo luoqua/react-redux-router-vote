@@ -73,7 +73,7 @@ module.exports = {
 		}),
 		new webpack.ProvidePlugin({
 			$: 'jquery',
-			IScroll: 'iscroll'
+			IScroll: path.resolve(__dirname, "./src_demo/lib/iscroll")
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: "vendor",

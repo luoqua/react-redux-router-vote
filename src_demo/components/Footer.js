@@ -21,10 +21,10 @@ export default class Footer extends Component {
             <Link  to="/index_thd"className="community item1 bdf">
             	<img src={ require('../../public/image/icon004.png') }alt="" /><br />活动介绍
             </Link>
-            <a className="ticket item1 bdf" >
+            <Link to="/rank_list" className="ticket item1 bdf" >
             	<img src={ require('../../public/image/icon003.png') }alt="" /><br />排名
-            </a>
+            </Link>
         </div>
-		)
+	     )
 	}
 }

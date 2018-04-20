@@ -15,7 +15,9 @@ import {
 	CHANGEALERTSHOW,
 	CHANGELOADINGSHOW,
 	SETTIMER,
-	INITIALUPLOADIMG
+	INITIALUPLOADIMG,
+	SETRANKLIST,
+	SEARCHRESULT
 } from '../constants/ActionsTypes'
 
 const initialState = {
@@ -36,6 +38,7 @@ const initialState = {
 	loadingMessage:"数据加载中",
 	timerFlag:true,
 	rankList:[],
+	nothingFlag:false,
 }
 
 export default function todos(state = initialState, action) {
@@ -45,7 +48,7 @@ export default function todos(state = initialState, action) {
 			todo.id == action.id ? { ...todo,owner_vote: action.owner_vote++} : todo)
 
 		case SET_VOTELIST:
-			return { ...state,vote_list:[ ...state.vote_list, ...action.votelist ] }
+			return { ...state,vote_list:[ ...state.vote_list, ...action.votelist ],nothingFlag:false }
 		
 		case TRAGGER_SCROOL_FLAG:
 			return { ...state, createScrollFlag:!state.createScrollFlag}
@@ -83,6 +86,16 @@ export default function todos(state = initialState, action) {
 
 		case INITIALUPLOADIMG:
 			return {...state,uploadImgUrl:[]}
+
+		case SETRANKLIST:
+			return {...state,rankList:action.ranklist}
+
+		case SEARCHRESULT:
+			if( action.searchresult != null){
+				return {...state,vote_list:[ action.searchresult ],nothingFlag:false}
+			}else{
+				return {...state,vote_list:[],nothingFlag:true}
+			}	
 			default:
 			return state
 	}

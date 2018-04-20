@@ -10,10 +10,7 @@ export const voteTodo = (id, vote_num) => ({
 	id,
 	vote_num
 })
-export const searchList = (id) => ({
-	type: types.SEARCH_LIST,
-	id
-})
+
 //获取投票列表
 export const getVoteList = (pageIndex, pageLimit) => {
   return (dispatch, getState) => {
@@ -24,8 +21,10 @@ export const getVoteList = (pageIndex, pageLimit) => {
           pageLimit: pageLimit
         }
     }
+    pageIndex == 1 ? dispatch(ChangeLoadingshow(true,"数据加载中")):"";
     Fetch('http://bb.wxjysgcd.com/WuHu/Index/getVoteList', opitions)
       .then((data) => {
+        dispatch(ChangeLoadingshow(false))
         if( data != null ){
             dispatch(setVoteList(data))
         }else{
@@ -50,7 +49,8 @@ export const submitSignInfo = (img_url,owner_address,owner_tel,owner_desc) => {
     Fetch( 'http://bb.wxjysgcd.com/WuHu/Index/voteInfoUpload', opitions)
       .then((data) => {
       if( data != null ){
-       dispatch(setRankList(data))
+        dispatch(ChangeLoadingshow(false))
+        dispatch(ChangeAlertshow(true,"提交成功"))
       }
     })
   }
@@ -68,17 +68,45 @@ export const getVoteRankList = () => {
         pageIndex: 1,
       }
     }
+    dispatch(ChangeLoadingshow(true,"数据加载中"))
     Fetch('http://bb.wxjysgcd.com/WuHu/Index/getVoteRankList', opitions)
       .then((data) => {
       if( data != null ){
         dispatch(ChangeLoadingshow(false))
-        dispatch(ChangeAlertshow(true,"提交成功"))
+        dispatch(setRankList(data))
       }
     })
 
   }
 }
 
+//获取搜索信息
+export const searchVoteList = (search_number) =>{
+  return (dispatch, getState) => {
+    let owner_number = search_number;
+    if( owner_number == "" ){
+        return false;
+    }
+    let type = /^\d*$/.test(owner_number) ?  "number" : "address";
+    var opitions = {
+      method:"POST",
+      body: {
+        owner_number: owner_number,
+        type:type,
+      }
+    }
+    let state = getState();
+    Fetch('http://bb.wxjysgcd.com/WuHu/Index/getVoteList', opitions)
+      .then((data) => {
+        if( state.todos.listloading !== ""){
+          state.todos.listloading.destroy();
+        }
+        dispatch(searchResult(data))
+
+    })
+    
+  }
+}
 
 
 //填充投票列表
@@ -142,7 +170,6 @@ export const initialUploadImg = () =>({
 })
 
 //alert 控制alert
-
 export const ControlAlertshow = (show,message) =>{
   return (dispatch, getState) => {
     var state = getState();
@@ -170,6 +197,14 @@ export const setTimer = () => ({
 })
 //设置定时器状态
 export const setRankList = ( ranklist ) => ({
-  type:types.SETTIMER,
+  type:types.SETRANKLIST,
   ranklist:ranklist,
 })
+//返回查询结果
+export const searchResult = ( searchresult ) => ({
+  type:types.SEARCHRESULT,
+  searchresult:searchresult,
+})
+
+
+
