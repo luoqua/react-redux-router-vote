@@ -50,8 +50,10 @@ class SearchInfo extends Component {
       this.props.actions.initialVoteList();   //初始化投票列表数据
       this.props.actions.getVoteList(1,6)
       this.setState({ owner_number:""})
+      this.props.actions.searchFlag();
     }else{
       this.setState({ owner_number:event.target.value})
+      this.props.actions.searchFlag();
     }
   }
   searchList(){
@@ -174,8 +176,11 @@ export default class Index extends Component {
         </div>
       )
     }else{
+      if( !todos.searchFlag){
+        todosearchFlag = !todos.searchFlag;
+      }
       return (
-        <div id="loading2">
+        <div id="loading" show={todos.searchFlag.toString()}>
           <div>
             <Header />
     				<IndexInfo pageInfo = { todos.pageInfo}/>
@@ -186,4 +191,4 @@ export default class Index extends Component {
       )
     }
   }
-}
+}s.

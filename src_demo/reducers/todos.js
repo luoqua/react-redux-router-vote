@@ -17,7 +17,8 @@ import {
 	SETTIMER,
 	INITIALUPLOADIMG,
 	SETRANKLIST,
-	SEARCHRESULT
+	SEARCHRESULT,
+	SEARCHFLAG
 } from '../constants/ActionsTypes'
 
 const initialState = {
@@ -39,6 +40,7 @@ const initialState = {
 	timerFlag:true,
 	rankList:[],
 	nothingFlag:false,
+	searchFlag:false,
 }
 
 export default function todos(state = initialState, action) {
@@ -96,6 +98,10 @@ export default function todos(state = initialState, action) {
 			}else{
 				return {...state,vote_list:[],nothingFlag:true}
 			}	
+
+		case SEARCHFLAG:
+			return {...state,searchFlag:!action.searchFlag}
+
 			default:
 			return state
 	}
