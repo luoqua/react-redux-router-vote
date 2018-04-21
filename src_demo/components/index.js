@@ -50,10 +50,9 @@ class SearchInfo extends Component {
       this.props.actions.initialVoteList();   //初始化投票列表数据
       this.props.actions.getVoteList(1,6)
       this.setState({ owner_number:""})
-      this.props.actions.searchFlag();
+      this.props.actions.traggerScrollFlag()
     }else{
       this.setState({ owner_number:event.target.value})
-      this.props.actions.searchFlag();
     }
   }
   searchList(){
@@ -69,6 +68,31 @@ class SearchInfo extends Component {
         <input type="button" className="submit-btn ml5 bg04 colorf bdr5" value="搜索" onClick={ this.searchList.bind(this) } />
     	</div>
     )
+  }
+}
+
+
+class VoteListSearch extends Component {
+
+  componentDidUpdate(){
+    let promise = imgIsload(".opt-img"); //获取拿到的 promise
+    let that = this;
+    Promise.all(promise).then(function() { //待图片加载完成
+      waterfall("waterbox", ".pin");
+    })
+
+  }
+  render() {
+    const { VoteList, actions,listloading,nothingFlag } = this.props;
+    
+      return (
+        <div id="waterbox" className="plr5 color02 mt10">
+          { VoteList.map( item =>
+            <VoteListSection key={ item.id } VoteList = { item } actions = {actions}/>
+          )}
+            <div className="clearfix"></div>
+        </div>
+      )
   }
 }
 
@@ -91,6 +115,7 @@ class VoteList extends Component {
       waterfall("waterbox", ".pin");
      
       if( that.props.createScrollFlag ){
+        console.log(1)
         that.props.actions.traggerScrollFlag();
         var hei = $(window).height()-$(".bot-nav").height();
 
@@ -175,20 +200,28 @@ export default class Index extends Component {
           </div>
         </div>
       )
-    }else{
-      if( !todos.searchFlag){
-        todosearchFlag = !todos.searchFlag;
-      }
+    }else if(todos.searchFlag){
       return (
-        <div id="loading" show={todos.searchFlag.toString()}>
+        <div id="loading">
           <div>
             <Header />
-    				<IndexInfo pageInfo = { todos.pageInfo}/>
-    				<SearchInfo actions = { actions} todos={todos}/>
-    				<VoteList VoteList = { todos.vote_list } actions = { actions } nothingFlag={ todos.nothingFlag } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
+            <IndexInfo pageInfo = { todos.pageInfo}/>
+            <SearchInfo actions = { actions} todos={todos}/>
+            <VoteListSearch VoteList = { todos.vote_list } actions = { actions } nothingFlag={ todos.nothingFlag } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
           </div>
-  			</div>
+        </div>
+      )
+    }else{
+      return (
+        <div id="loading">
+          <div>
+            <Header />
+            <IndexInfo pageInfo = { todos.pageInfo}/>
+            <SearchInfo actions = { actions} todos={todos}/>
+            <VoteList VoteList = { todos.vote_list } actions = { actions } nothingFlag={ todos.nothingFlag } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
+          </div>
+        </div>
       )
     }
   }
-}s.
+}

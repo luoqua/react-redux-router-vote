@@ -97,11 +97,13 @@ export const searchVoteList = (search_number) =>{
     let state = getState();
     Fetch('http://bb.wxjysgcd.com/WuHu/Index/getVoteList', opitions)
       .then((data) => {
+        
         if( state.todos.listloading !== ""){
-          state.todos.listloading.destroy();
+          state.todos.listloading.destroy(); 
+          //this.props.actions.traggerScrollFlag()
         }
-        dispatch(searchResult(data))
         dispatch(searchFlag())
+        dispatch(searchResult(data))
     })
     
   }
