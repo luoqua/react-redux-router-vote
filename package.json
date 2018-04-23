@@ -6,7 +6,8 @@
   "scripts": {
     "test": "webpack",
     "dev": "webpack-dev-server --history-api-fallback",
-    "build": "webpack --config ./webpack.config.pro.js"
+    "build": "webpack --config ./webpack.config.pro.js",
+    "buildHome": "webpack --config ./webpack.config.pro.home.js"
   },
   "dependencies": {
     "babel": "^6.23.0",

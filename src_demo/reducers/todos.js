@@ -100,7 +100,11 @@ export default function todos(state = initialState, action) {
 			}	
 
 		case SEARCHFLAG:
-			return {...state,searchFlag:!action.searchFlag}
+			if( action.searchFlag ){
+				return {...state,searchFlag:true}
+			}else{
+				return {...state,searchFlag:false}
+			}
 
 			default:
 			return state

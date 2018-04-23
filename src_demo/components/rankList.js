@@ -15,7 +15,6 @@ class RankListIndex extends Component {
 
 	render(){
     const {todos,actions} = this.props;
-        console.log(this)
 		return( 
            <div className="rank  f14 plr10 mt10 special—color" style={{paddingBottom:"0.35rem"}}>
                 <table className="w100">

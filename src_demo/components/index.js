@@ -47,10 +47,12 @@ class SearchInfo extends Component {
 
   handelInput(event){
     if( event.target.value == ""){
-      this.props.actions.initialVoteList();   //初始化投票列表数据
-      this.props.actions.getVoteList(1,6)
+/*      this.props.actions.initialVoteList();   //初始化投票列表数据
+      this.props.actions.getVoteList(1,6)*/
       this.setState({ owner_number:""})
-      this.props.actions.traggerScrollFlag()
+    window.location.href="/dist";      
+     /* this.props.actions.traggerScrollFlag();
+      this.props.actions.searchFlag(false)*/
     }else{
       this.setState({ owner_number:event.target.value})
     }
@@ -86,7 +88,7 @@ class VoteListSearch extends Component {
     const { VoteList, actions,listloading,nothingFlag } = this.props;
     
       return (
-        <div id="waterbox" className="plr5 color02 mt10">
+        <div id="waterbox" className="plr5 color02 mt10" style={{height:"auto"}}>
           { VoteList.map( item =>
             <VoteListSection key={ item.id } VoteList = { item } actions = {actions}/>
           )}
@@ -115,7 +117,6 @@ class VoteList extends Component {
       waterfall("waterbox", ".pin");
      
       if( that.props.createScrollFlag ){
-        console.log(1)
         that.props.actions.traggerScrollFlag();
         var hei = $(window).height()-$(".bot-nav").height();
 
@@ -189,7 +190,7 @@ export default class Index extends Component {
     if( todos.nothingFlag ){
       return(
         <div id="loading">
-          <div>
+          <div className="loading-box">
             <Header />
             <IndexInfo pageInfo = { todos.pageInfo}/>
             <SearchInfo actions = { actions} todos={todos}/>
@@ -203,12 +204,12 @@ export default class Index extends Component {
     }else if(todos.searchFlag){
       return (
         <div id="loading">
-          <div>
+          <div> 
             <Header />
             <IndexInfo pageInfo = { todos.pageInfo}/>
             <SearchInfo actions = { actions} todos={todos}/>
             <VoteListSearch VoteList = { todos.vote_list } actions = { actions } nothingFlag={ todos.nothingFlag } createScrollFlag = { todos.createScrollFlag } listloading= { todos.listloading } touchBottomFlag = { todos.touch_bottom_flag }/>
-          </div>
+          </div>  
         </div>
       )
     }else{

@@ -16,7 +16,7 @@ module.exports={
 		vendor:['jquery','react','react-dom','redux','react-redux','prop-types','react-router'],
 	},
 	output:{
-		path:path.resolve(__dirname,'../lyr-project/dist'),
+		path:path.resolve(__dirname,'../lyr-project/dist/dist'),
 		filename:"[name].js",
 		chunkFilename:'[chunkhash:8].chunk.js'
 	},

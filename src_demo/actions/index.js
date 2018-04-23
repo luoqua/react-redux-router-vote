@@ -74,6 +74,7 @@ export const getVoteRankList = () => {
       if( data != null ){
         dispatch(ChangeLoadingshow(false))
       }
+      dispatch(setRankList(data))
     })
 
   }
@@ -102,7 +103,7 @@ export const searchVoteList = (search_number) =>{
           state.todos.listloading.destroy(); 
           //this.props.actions.traggerScrollFlag()
         }
-        dispatch(searchFlag())
+        dispatch(searchFlag(true))
         dispatch(searchResult(data))
     })
     
@@ -208,8 +209,9 @@ export const searchResult = ( searchresult ) => ({
 })
 
 //是否搜索状态
-export const searchFlag = () => ({
+export const searchFlag = ( searchFlag ) => ({
   type:types.SEARCHFLAG,
+  searchFlag:searchFlag
 })
 
 
